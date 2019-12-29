@@ -19,7 +19,9 @@ const bodyParser = require('body-parser');
 //importing graphql schema files
 const schema = require('./schema/schema');
 
-
+const cors = require('cors');
+//allow cross origin requests
+app.use(cors());
 
 /** ---------- MIDDLEWARE ---------- **/
 app.use(bodyParser.json()); // needed for angular requests

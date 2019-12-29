@@ -9,10 +9,19 @@ import Home from '../pages/Home/home';
 import Details from '../pages//Details/details';
 import Edit from '../pages/Edit/edit';
 
+//importing apollo and setup
+import ApolloClient from 'apollo-boost';
+import {  ApolloProvider } from 'react-apollo';
+
+const client = new ApolloClient({
+  uri: 'HTTP://localhost:5000/graphql'
+})
+
 class App extends Component {
   // Renders the entire app on the DOM
   render() {
     return (
+      <ApolloProvider client={client}>
       <Router>
         <div className="App">
           <header className="App-header">
@@ -25,6 +34,7 @@ class App extends Component {
           </div>
         </div>
       </Router>
+      </ApolloProvider>
     );
   }
 }

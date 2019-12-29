@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-//Redux 
-import { connect } from 'react-redux';
-import mapStoreToProps from '../../redux/mapStoreToProps';
+// //Redux 
+// import { connect } from 'react-redux';
+// import mapStoreToProps from '../../redux/mapStoreToProps';
 //Material UI
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -18,15 +18,15 @@ class Details extends Component {
     }
 
     render() {
-        const itemArr = this.props.store.detailReducer.selected && this.props.store.detailReducer.selected.map((item, index) => {
-            return (
-                <li key={index}>
+        // const itemArr = this.props.store.detailReducer.selected && this.props.store.detailReducer.selected.map((item, index) => {
+        //     return (
+        //         <li key={index}>
 
-                    {item.name}
+        //             {item.name}
 
-                </li>
-            )
-        })
+        //         </li>
+        //     )
+        // })
 
         return (
             <div className="App">
@@ -36,16 +36,16 @@ class Details extends Component {
                 <div>
                     <Grid container>
                         <Grid item xs={4}>
-                            <img alt="" src={this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].poster}></img>
+                            {/* <img alt="" src={this.props.store.rootReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].poster}></img> */}
                         </Grid>
                         <Grid item xs={7}>
-                            <h1>{this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].title}</h1>
-                            <p>{this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].description}</p>
+                            {/* <h1>{this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].title}</h1>
+                            <p>{this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].description}</p> */}
                         </Grid>
                     </Grid>
                 </div>
                 <ul>
-                    {itemArr}
+                    {/* {itemArr} */}
                 </ul>
             </div>
         );
@@ -54,4 +54,4 @@ class Details extends Component {
 
 
 
-export default connect(mapStoreToProps)(Details);
+export default Details;
