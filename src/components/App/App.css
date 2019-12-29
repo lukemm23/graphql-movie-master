@@ -1,17 +1,25 @@
-.App {
-  text-align: center;
-}
-
-
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: rgb(6,9, 13);
+  height: 50px;
   padding: 20px;
   color: white;
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .App-title {
   font-size: 1.5em;
+}
+
+.App-body {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: 15%;
+  margin-right: 10%;
+  align-items: center;
 }
 
 .App-intro {
@@ -22,3 +30,15 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body {
+  background-color: rgb(36, 36, 36);
+  color: rgb(255, 255, 255);
+}
+
+.App Button {
+  margin-bottom: 3rem;
+  margin-right: 1rem;
+}
+
+
