@@ -1,25 +1,55 @@
 import React, { Component } from 'react';
-//Redux
-import { connect } from 'react-redux';
-import mapStoreToProps from '../../redux/mapStoreToProps';
+//importing apollo and setup
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+//importing gql
+import { gql } from 'apollo-boost';
+import { graphql } from 'react-apollo';
+
 //Material UI
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+const client = new ApolloClient({
+  uri: 'HTTP://localhost:5000/graphql'
+})
+
+const getDetailQuery = gql`
+  query movie($id:ID!){
+  movie(id: $id){
+          id
+          name
+          poster
+          description
+          genre {
+              name
+          }
+      }
+  }
+
+`
+
 class Edit extends Component {
   //local state to track input
   state = {
-    id: null,
-    title: '',
-    description: '',
+    name:'',
+    poster:'',
+    description:'',
+    genreId:'',
   }
-  //mounting selected id onto local state
-  componentDidMount() {
-    this.setState({
-      id: this.props.store.detailReducer.selected[0].movies_id,
-    })
-    console.log(this.state.id);
-  }
+
+  displayGenre() {
+    const data = this.props.data;
+    if (data.loading) {
+        return (<div>Loading Movies...</div>);
+    } else {
+        return data.movie.genre.map((item, index) =>{
+            return (
+                <li key={index}>{item.name}</li>
+            )
+        })
+    }
+}
 
   //event handlers for input text fields
   onInputChange = (event, inputKey) => {
@@ -31,47 +61,41 @@ class Edit extends Component {
   }
 
   //submit handler to save inputs into database
-  submitChange = (event, id) => {
-    this.props.dispatch({
-      type: 'SUBMIT',
-      payload: {
-        ...this.state, callBack: () => {
-          console.log('go back');
-          this.props.history.push('/details');
-        }
-      }
-    })
-  }
+  // submitChange = (event, id) => {
+  //   this.props.dispatch({
+  //     type: 'SUBMIT',
+  //     payload: {
+  //       ...this.state, callBack: () => {
+  //         console.log('go back');
+  //         this.props.history.push('/details');
+  //       }
+  //     }
+  //   })
+  // }
 
   //PAGE ROUTING
   backHome = () => {
     this.props.history.push('/');
   }
   details = () => {
-    this.props.history.push('/details');
+    this.props.history.push('/details/'+this.props.data.movie.id);
   }
   render() {
-
-    const itemArr = this.props.store.detailReducer.selected && this.props.store.detailReducer.selected.map((item, index) => {
-      return (
-        <li key={index}>
-          {item.name}
-        </li>
-      )
-    })
-
     return (
+      <ApolloProvider clent={client}>
       <div className="App">
         <Button variant="contained" color="primary" onClick={this.backHome}>Back Home</Button>
         <Button variant="contained" color="primary" onClick={this.details}>Cancel</Button>
         <Button variant="contained" color="primary" onClick={this.submitChange}>Save</Button>
         <div>
           <div>
-            New Title Value: {this.state.title}
+            New Title Value:
+            {this.state.title}
           </div>
           <br></br>
           <div>
-            New Descriptions: {this.state.description}
+            New Descriptions:
+            {this.state.description}
           </div>
           <h4>Input Title and Description</h4>
           <TextField
@@ -92,12 +116,21 @@ class Edit extends Component {
 
         </div>
         <ul>
-          {itemArr}
+          {this.displayGenre()}
         </ul>
 
       </div>
+      </ApolloProvider>
     );
   }
 }
 
-export default connect(mapStoreToProps)(Edit);
+export default graphql(getDetailQuery, {
+  options: props => {
+      return {
+          variables: { id: props.match.params.id }
+      }
+  }
+})(
+  Edit
+);

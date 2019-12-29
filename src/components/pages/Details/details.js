@@ -1,57 +1,104 @@
 import React, { Component } from 'react';
-
-// //Redux 
-// import { connect } from 'react-redux';
-// import mapStoreToProps from '../../redux/mapStoreToProps';
+//importing apollo and setup
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
+//importing gql
+import { gql } from 'apollo-boost';
+import { graphql } from 'react-apollo';
 //Material UI
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-class Details extends Component {
+const client = new ApolloClient({
+    uri: 'HTTP://localhost:5000/graphql'
+})
 
+const getDetailQuery = gql`
+    query movie($id:ID!){
+    movie(id: $id){
+            id
+            name
+            poster
+            description
+            genre {
+                name
+            }
+        }
+    }
+  
+  `
+
+class Details extends Component {
     //ROUTE buttons handler
     backHome = () => {
         this.props.history.push('/');
     }
     edit = () => {
-        this.props.history.push('/edit');
+        console.log(this.props.data.movie.id);
+        this.props.history.push('/edit/'+this.props.data.movie.id);
+    }
+
+    displayGenre() {
+        const data = this.props.data;
+        if (data.loading) {
+            return (<div>Loading Movies...</div>);
+        } else {
+            return data.movie.genre.map((item, index) =>{
+                return (
+                    <li key={index}>{item.name}</li>
+                )
+            })
+        }
+    }
+
+    displayDetails() {
+        console.log(this.props.data);
+        const data = this.props.data;
+        if (data.loading) {
+            return (<div>Loading Movies...</div>);
+        } else {
+            return (<Grid container>
+                <Grid item xs={4}>
+                    <img alt="" src={data.movie.poster}></img>
+                </Grid>
+                <Grid item xs={7}>
+                    <h1>{data.movie.name}</h1>
+                    <p>{data.movie.description}</p>
+                    <ul>
+                        {this.displayGenre()}
+                    </ul>
+                </Grid>
+            </Grid>
+
+            )
+        }
     }
 
     render() {
-        // const itemArr = this.props.store.detailReducer.selected && this.props.store.detailReducer.selected.map((item, index) => {
-        //     return (
-        //         <li key={index}>
-
-        //             {item.name}
-
-        //         </li>
-        //     )
-        // })
-
         return (
-            <div className="App">
-                <Button variant="contained" color="primary" onClick={this.backHome}>Back Home</Button>
-                <Button variant="contained" color="primary" onClick={this.edit}>Edit</Button>
-                <br />
-                <div>
-                    <Grid container>
-                        <Grid item xs={4}>
-                            {/* <img alt="" src={this.props.store.rootReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].poster}></img> */}
-                        </Grid>
-                        <Grid item xs={7}>
-                            {/* <h1>{this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].title}</h1>
-                            <p>{this.props.store.detailReducer.selected && this.props.store.detailReducer.selected[0] && this.props.store.detailReducer.selected[0].description}</p> */}
-                        </Grid>
-                    </Grid>
+            <ApolloProvider client={client}>
+                <div className="App">
+                    <Button variant="contained" color="primary" onClick={this.backHome}>Back Home</Button>
+                    <Button variant="contained" color="primary" onClick={this.edit}>Edit</Button>
+                    <br />
+                    <div>
+                        {this.displayDetails()}
+                    </div>
+                    
                 </div>
-                <ul>
-                    {/* {itemArr} */}
-                </ul>
-            </div>
+            </ApolloProvider>
         );
     }
 }
 
+export default graphql(getDetailQuery, {
+    options: props => {
+        return {
+            variables: { id: props.match.params.id }
+        }
+    }
+})(
+    Details
+);
 
 
-export default Details;
