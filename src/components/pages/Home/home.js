@@ -5,10 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import ApolloClient from 'apollo-boost';
 import {  ApolloProvider } from 'react-apollo';
 //importing gql
-import {gql} from 'apollo-boost';
 import {graphql} from 'react-apollo';
-//Redux
-import { connect } from 'react-redux';
+import { gql } from 'apollo-boost';
 
 const client = new ApolloClient({
   uri: 'HTTP://localhost:5000/graphql'
@@ -25,6 +23,7 @@ const getMoviesQuery = gql`
   }
 }
 `
+
 class Home extends Component {
   
   //image click event 
@@ -66,4 +65,4 @@ class Home extends Component {
   }
 }
 
-export default connect()(graphql(getMoviesQuery)(Home));
+export default graphql(getMoviesQuery)(Home);

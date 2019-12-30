@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 //importing gql
-import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 //Material UI
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { gql } from 'apollo-boost';
 
 const client = new ApolloClient({
     uri: 'HTTP://localhost:5000/graphql'
@@ -34,8 +34,7 @@ class Details extends Component {
         this.props.history.push('/');
     }
     edit = () => {
-        console.log(this.props.data.movie.id);
-        this.props.history.push('/edit/'+this.props.data.movie.id);
+        this.props.history.push('/edit/' + this.props.data.movie.id);
     }
 
     displayGenre() {
@@ -52,7 +51,6 @@ class Details extends Component {
     }
 
     displayDetails() {
-        console.log(this.props.data);
         const data = this.props.data;
         if (data.loading) {
             return (<div>Loading Movies...</div>);
@@ -79,7 +77,7 @@ class Details extends Component {
             <ApolloProvider client={client}>
                 <div className="App">
                     <Button variant="contained" color="primary" onClick={this.backHome}>Back Home</Button>
-                    <Button variant="contained" color="primary" onClick={this.edit}>Edit</Button>
+                    <Button variant="contained" color="primary" onClick={this.edit}>Add Movie</Button>
                     <br />
                     <div>
                         {this.displayDetails()}
